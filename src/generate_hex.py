@@ -18,7 +18,9 @@ def tessellate_hex(boundry_gdb, res = 7):
     df = pd.DataFrame(geos)
     df['id'] = df.index
     gdf = gpd.GeoDataFrame(df, geometry='geometry', crs="EPSG:4326")
-    return gdf
+    point_gdf = gdf.copy().to_crs('EPSG:26917')
+    point_gdf['geometry'] = point_gdf['geometry'].centroid
+    return point_gdf, gdf
 
 def tessellate_hex_id(boundry_gdb, res = 7):
     boundry_h3 = h3.geo_to_h3shape(boundry_gdb.iloc[0].__geo_interface__)
